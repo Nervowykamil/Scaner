@@ -3,6 +3,15 @@
 using namespace System::Windows::Forms;
 using namespace System::Threading;
 
+unsigned int Worker::getMSTime()
+{
+    using namespace std::chrono;
+
+    static const steady_clock::time_point ApplicationStartTime = steady_clock::now();
+
+    return unsigned int(duration_cast<milliseconds>(steady_clock::now() - ApplicationStartTime).count());
+}
+
 void Worker::doWork()
 {
     bool startmessage = true;
