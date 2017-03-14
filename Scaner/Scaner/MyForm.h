@@ -21,7 +21,12 @@ namespace Scaner {
 			//
 			//TODO: Add the constructor code here
 			//
+            g1 = panel1->CreateGraphics();
 		}
+
+        void addLogLine(String ^line);
+        void ClearMap();
+        void DrawDot(int x, int y, int r, Color color);
 
 	protected:
 		/// <summary>
@@ -39,9 +44,8 @@ namespace Scaner {
     private: System::Windows::Forms::Panel^  panel1;
 
 	private:
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
+        Graphics ^g1;
+
 		System::ComponentModel::Container ^components;
 
 #pragma region Windows Form Designer generated code
