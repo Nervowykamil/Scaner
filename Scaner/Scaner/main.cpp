@@ -1,15 +1,7 @@
-#include "MyForm.h"
-
-using namespace System;
-using namespace System::Windows::Forms;
-
+#include "Worker.h"
 
 [STAThread]
 void Main(array<String^>^ args)
 {
-    Application::EnableVisualStyles();
-    Application::SetCompatibleTextRenderingDefault(false);
-
-    Scaner::MyForm form;
-    Application::Run(%form);
+    Worker ^worker = gcnew Worker();
 }

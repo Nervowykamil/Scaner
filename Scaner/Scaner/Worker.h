@@ -9,4 +9,5 @@ public:
     Worker();
     void doWork();
 private:
+    Scaner::MyForm^ formPtr;
 };
