@@ -34,6 +34,9 @@ namespace Scaner {
 				delete components;
 			}
 		}
+    private: System::Windows::Forms::RichTextBox^  richTextBox1;
+    protected:
+    private: System::Windows::Forms::Panel^  panel1;
 
 	private:
 		/// <summary>
@@ -48,12 +51,40 @@ namespace Scaner {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			this->components = gcnew System::ComponentModel::Container();
-			this->Size = System::Drawing::Size(300,300);
-			this->Text = L"MyForm";
-			this->Padding = System::Windows::Forms::Padding(0);
-			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-		}
+            this->richTextBox1 = (gcnew System::Windows::Forms::RichTextBox());
+            this->panel1 = (gcnew System::Windows::Forms::Panel());
+            this->SuspendLayout();
+            // 
+            // richTextBox1
+            // 
+            this->richTextBox1->Enabled = false;
+            this->richTextBox1->Location = System::Drawing::Point(12, 12);
+            this->richTextBox1->Name = L"richTextBox1";
+            this->richTextBox1->Size = System::Drawing::Size(210, 118);
+            this->richTextBox1->TabIndex = 0;
+            this->richTextBox1->Text = L"";
+            // 
+            // panel1
+            // 
+            this->panel1->Location = System::Drawing::Point(12, 136);
+            this->panel1->Name = L"panel1";
+            this->panel1->Size = System::Drawing::Size(210, 210);
+            this->panel1->TabIndex = 1;
+            // 
+            // MyForm
+            // 
+            this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
+            this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+            this->ClientSize = System::Drawing::Size(236, 358);
+            this->Controls->Add(this->panel1);
+            this->Controls->Add(this->richTextBox1);
+            this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
+            this->Name = L"MyForm";
+            this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
+            this->Text = L"Object Scaner";
+            this->ResumeLayout(false);
+
+        }
 #pragma endregion
 	};
 }
