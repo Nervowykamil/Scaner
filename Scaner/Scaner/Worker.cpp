@@ -3,17 +3,26 @@
 using namespace System::Windows::Forms;
 using namespace System::Threading;
 
-unsigned int Worker::getMSTime()
+void Worker::Init()
+{
+    formPtr->addLogLine("Started \n");
+}
+
+long Worker::getMSTime()
 {
     using namespace std::chrono;
+    auto time = system_clock::now();
 
-    static const steady_clock::time_point ApplicationStartTime = steady_clock::now();
+    auto since_epoch = time.time_since_epoch();
 
-    return unsigned int(duration_cast<milliseconds>(steady_clock::now() - ApplicationStartTime).count());
+    auto milis = duration_cast<milliseconds>(since_epoch);
+    
+    return long(milis.count());
 }
 
 void Worker::doWork()
 {
+    long lastTime = getMSTime();
     bool startmessage = true;
     while (1)
     {
@@ -22,11 +31,28 @@ void Worker::doWork()
             // serious stuff
             if (startmessage)
             {
-                formPtr->addLogLine("Started \n");
+                Init();
                 startmessage = false;
             }
+            else
+            {
+                long diff = getMSTime() - lastTime; // time diff between loops
+                lastTime = getMSTime(); // set lastTime to now
+                if (updateTimer - diff <= 0)
+                {
+                    Tick();
+                    updateTimer = 500; // 500 ms = 0.5s
+                } else updateTimer -= diff;
+            }
         }
+
     }
+}
+
+void Worker::Tick()
+{
+    // do things
+    formPtr->addLogLine("Tick \n");
 }
 
 Worker::Worker()
@@ -34,9 +60,12 @@ Worker::Worker()
     Application::EnableVisualStyles();
     Application::SetCompatibleTextRenderingDefault(false);
 
-    Scaner::MyForm form;
-    formPtr = %form;
     Thread ^t1 = gcnew Thread(gcnew ThreadStart(this, &Worker::doWork));
-    t1->Start();
+    Scaner::MyForm form(t1);
+    formPtr = %form;
+    
     Application::Run(%form);
+
+    // set some stuff
+    updateTimer = 500;
 }

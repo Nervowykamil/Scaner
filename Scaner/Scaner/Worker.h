@@ -8,7 +8,10 @@ ref class Worker
 public:
     Worker();
     void doWork();
-    unsigned int getMSTime();
+    void Tick();
+    void Init();
+    long getMSTime();
 private:
     Scaner::MyForm^ formPtr;
+    int updateTimer;
 };

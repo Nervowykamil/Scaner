@@ -8,6 +8,7 @@ namespace Scaner {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+    using namespace System::Threading;
 
 	/// <summary>
 	/// Summary for MyForm
@@ -15,13 +16,14 @@ namespace Scaner {
 	public ref class MyForm : public System::Windows::Forms::Form
 	{
 	public:
-		MyForm(void)
+		MyForm(Thread ^thread)
 		{
 			InitializeComponent();
 			//
 			//TODO: Add the constructor code here
 			//
             g1 = panel1->CreateGraphics();
+            t1 = thread;
 		}
 
         void addLogLine(String ^line);
@@ -45,6 +47,7 @@ namespace Scaner {
 
 	private:
         Graphics ^g1;
+        Thread ^t1;
 
 		System::ComponentModel::Container ^components;
 
@@ -61,9 +64,9 @@ namespace Scaner {
             // 
             // richTextBox1
             // 
-            this->richTextBox1->Enabled = false;
             this->richTextBox1->Location = System::Drawing::Point(12, 12);
             this->richTextBox1->Name = L"richTextBox1";
+            this->richTextBox1->ReadOnly = true;
             this->richTextBox1->Size = System::Drawing::Size(210, 118);
             this->richTextBox1->TabIndex = 0;
             this->richTextBox1->Text = L"";
@@ -86,9 +89,19 @@ namespace Scaner {
             this->Name = L"MyForm";
             this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
             this->Text = L"Object Scaner";
+            this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &MyForm::MyForm_FormClosing);
+            this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
             this->ResumeLayout(false);
 
         }
 #pragma endregion
-	};
+    private: System::Void MyForm_FormClosing(System::Object^  sender, System::Windows::Forms::FormClosingEventArgs^  e)
+    {
+        t1->Abort();
+    }
+    private: System::Void MyForm_Load(System::Object^  sender, System::EventArgs^  e) 
+    {
+        t1->Start();
+    }
+    };
 }
