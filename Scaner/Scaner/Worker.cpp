@@ -56,7 +56,9 @@ void Worker::doWork()
 void Worker::Tick()
 {
     // do things
-    formPtr->addLogLine("Tick  \n");
+    float x, y, z;
+    rdr->ReadPlayerXYZ(x, y, z);
+    formPtr->addLogLine("x = " + x + " y = " + y + " z = " + z + "\n");
 }
 
 Worker::Worker()
