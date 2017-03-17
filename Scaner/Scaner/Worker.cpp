@@ -5,7 +5,11 @@ using namespace System::Threading;
 
 void Worker::Init()
 {
-    formPtr->addLogLine("Started \n");
+    rdr = new Reader();
+    formPtr->addLogLine("Started, player guid = " + rdr->GetLocalGUID() + " \n");
+    float x, y, z;
+    rdr->ReadPlayerXYZ(x, y, z);
+    formPtr->addLogLine("x = " + x + " y = " + y + " z = " + z + "\n");
 }
 
 long Worker::getMSTime()
@@ -52,7 +56,7 @@ void Worker::doWork()
 void Worker::Tick()
 {
     // do things
-    formPtr->addLogLine("Tick \n");
+    formPtr->addLogLine("Tick  \n");
 }
 
 Worker::Worker()
