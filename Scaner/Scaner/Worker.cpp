@@ -6,10 +6,12 @@ using namespace System::Threading;
 void Worker::Init()
 {
     rdr = new Reader();
-    formPtr->addLogLine("Started, player guid = " + rdr->GetLocalGUID() + " \n");
-    float x, y, z;
-    rdr->ReadPlayerXYZ(x, y, z);
-    formPtr->addLogLine("x = " + x + " y = " + y + " z = " + z + "\n");
+    formPtr->addLogLine("Hello.\n");
+    formPtr->addLogLine("Scanning initiated.\n");
+    formPtr->addLogLine("Every 50 milliseconds map will be updated.\n");
+
+    // initial read local player info
+    rdr->UpdatePlayerInfo();
 }
 
 long Worker::getMSTime()
@@ -45,7 +47,7 @@ void Worker::doWork()
                 if (updateTimer - diff <= 0)
                 {
                     Tick();
-                    updateTimer = 500; // 500 ms = 0.5s
+                    updateTimer = 50; // 50 ms = 0.05s
                 } else updateTimer -= diff;
             }
         }
@@ -55,10 +57,40 @@ void Worker::doWork()
 
 void Worker::Tick()
 {
-    // do things
-    float x, y, z;
-    rdr->ReadPlayerXYZ(x, y, z);
-    formPtr->addLogLine("x = " + x + " y = " + y + " z = " + z + "\n");
+    // initial cleanup of map and update player data(position/guid etc)
+    formPtr->ClearMap();
+    rdr->UpdatePlayerInfo();
+
+    // gps stuff
+    rdr->GetObjectsForMap(50);
+    for (std::list<object>::const_iterator iter = rdr->list.begin(); iter != rdr->list.end(); ++iter)
+    {
+        object obj = (*iter);
+        System::String ^name = gcnew System::String(obj.name.c_str());
+
+        // calculate possition for map
+        int x, y;
+        rdr->PositionForMap(obj.x, obj.y, x, y);
+
+        if (rdr->GetLocalGUID() == obj.guid && obj.type == 4)// local player is always in center of map that we'll draw
+        {
+            x = 0;
+            y = 0;
+        }
+
+        switch (obj.type)
+        {
+        case 3: // unit
+            formPtr->DrawDot(105 + y, 105 + x, 4, System::Drawing::Color::Red);
+            break;
+        case 4: // player
+            formPtr->DrawDot(105 + y, 105 + x, 6, System::Drawing::Color::Green);
+            break;
+        case 5: //gobject
+            formPtr->DrawDot(105 + y, 105 + x, 4, System::Drawing::Color::Blue);
+            break;
+        }
+    }
 }
 
 Worker::Worker()
@@ -72,6 +104,6 @@ Worker::Worker()
     
     Application::Run(%form);
 
-    // set some stuff
+    // set timer
     updateTimer = 500;
 }

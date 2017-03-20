@@ -10,7 +10,7 @@ void Scaner::MyForm::addLogLine(String ^ line)
 
 void Scaner::MyForm::ClearMap()
 {
-    throw gcnew System::NotImplementedException();
+    g1->Clear(System::Drawing::Color::Azure);
 }
 
 void Scaner::MyForm::DrawDot(int x, int y, int r, System::Drawing::Color color)
