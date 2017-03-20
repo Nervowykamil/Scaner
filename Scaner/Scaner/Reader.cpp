@@ -64,7 +64,8 @@ void Reader::UpdatePlayerInfo()
     ReadProcessMemory(hWoW, (LPVOID)(plrBase + OFF_UNIT_X), &local_x, sizeof(float), 0);
     ReadProcessMemory(hWoW, (LPVOID)(plrBase + OFF_UNIT_Y), &local_y, sizeof(float), 0);
     ReadProcessMemory(hWoW, (LPVOID)(plrBase + OFF_UNIT_Z), &local_z, sizeof(float), 0);
-    }
+    ReadProcessMemory(hWoW, (LPVOID)(plrBase + OFF_UNIT_R), &local_r, sizeof(float), 0);
+}
 
 DWORD Reader::FindPlayerByGUID(UINT64 guid)
 {
@@ -178,6 +179,7 @@ object Reader::ReadObjectInfo(DWORD loc)
         ReadProcessMemory(hWoW, (LPVOID)(loc + OFF_UNIT_X), &obj.x, sizeof(float), 0);
         ReadProcessMemory(hWoW, (LPVOID)(loc + OFF_UNIT_Y), &obj.y, sizeof(float), 0);
         ReadProcessMemory(hWoW, (LPVOID)(loc + OFF_UNIT_Z), &obj.z, sizeof(float), 0);
+        ReadProcessMemory(hWoW, (LPVOID)(loc + OFF_UNIT_R), &obj.r, sizeof(float), 0);
     }
     if (obj.type == 5)
     {
@@ -203,12 +205,31 @@ float Reader::GetDist2D(float x, float y)
     return sqrt(distX * distX + distY * distY);
 }
 
-void Reader::PositionForMap(float x, float y, int & x1, int & y1)
+float Reader::GetAngleToXY(float x, float y)
 {
+    return atan2(x, y);;
+}
+
+void Reader::PositionForMap(float x, float y, int &x1, int &y1)
+{
+    float m_pi = 3.141592653;
     float x2 = local_x - x;
     float y2 = local_y - y;
-    x1 = int(2 * x2);
-    y1 = int(2 * y2);
+    float dist = GetDist2D(x, y);
+    float angle = GetAngleToXY(x2, y2) + local_r;
+    
+    // normalize angle to be between 0 and 2 * m_pi
+    while (angle > (2 * m_pi))
+    {
+        angle -= 2 * m_pi;
+    }
+
+    // rotate to current player orientation
+    x1 = dist * cos(angle);
+    y1 = dist * sin(angle);
+
+    x1 = int(2 * x1);
+    y1 = int(2 * y1);
     return;
 }
 

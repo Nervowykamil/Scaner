@@ -62,7 +62,7 @@ void Worker::Tick()
     rdr->UpdatePlayerInfo();
 
     // gps stuff
-    rdr->GetObjectsForMap(50);
+    rdr->GetObjectsForMap(75);
     for (std::list<object>::const_iterator iter = rdr->list.begin(); iter != rdr->list.end(); ++iter)
     {
         object obj = (*iter);
@@ -81,13 +81,13 @@ void Worker::Tick()
         switch (obj.type)
         {
         case 3: // unit
-            formPtr->DrawDot(105 + y, 105 + x, 4, System::Drawing::Color::Red);
+            formPtr->DrawDot(105 + x, 105 + y, 4, System::Drawing::Color::Red);
             break;
         case 4: // player
-            formPtr->DrawDot(105 + y, 105 + x, 6, System::Drawing::Color::Green);
+            formPtr->DrawDot(105 + x, 105 + y, 6, System::Drawing::Color::Green);
             break;
         case 5: //gobject
-            formPtr->DrawDot(105 + y, 105 + x, 4, System::Drawing::Color::Blue);
+            formPtr->DrawDot(105 + x, 105 + y, 4, System::Drawing::Color::Blue);
             break;
         }
     }

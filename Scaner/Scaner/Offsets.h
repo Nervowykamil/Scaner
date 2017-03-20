@@ -21,6 +21,7 @@ enum UnitOffsets
     OFF_UNIT_X                  = 0x798,
     OFF_UNIT_Y                  = 0x798 + 0x04,
     OFF_UNIT_Z                  = 0x798 + 0x08,
+    OFF_UNIT_R                  = 0x798 + 0x10,
     OFF_UNIT_NAME1              = 0x964,
     OFF_UNIT_NAME2              = 0x5C,
 };
