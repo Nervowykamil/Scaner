@@ -50,6 +50,8 @@ void Worker::doWork()
                     updateTimer = 50; // 50 ms = 0.05s
                 } else updateTimer -= diff;
             }
+            // sleep 1 ms every loop so processor will not burn from getting time function
+            Sleep(1); 
         }
 
     }
