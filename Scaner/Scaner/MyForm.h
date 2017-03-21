@@ -22,12 +22,14 @@ namespace Scaner {
 			//
 			//TODO: Add the constructor code here
 			//
-            g1 = panel1->CreateGraphics();
+            bm = gcnew Bitmap(panel1->Width, panel1->Height);
+            g1 = Graphics::FromImage(bm);
+            g2 = panel1->CreateGraphics();
             t1 = thread;
 		}
 
         void addLogLine(String ^line);
-        void ClearMap();
+        void RedrawMap();
         void DrawDot(int x, int y, int r, Color color);
 
 	protected:
@@ -46,7 +48,9 @@ namespace Scaner {
     private: System::Windows::Forms::Panel^  panel1;
 
 	private:
-        Graphics ^g1;
+        Graphics ^g1; // offscreen buffer
+        Graphics ^g2; // onscreen buffer
+        Bitmap ^bm; // bitmap for offscreen buffer
         Thread ^t1;
 
 		System::ComponentModel::Container ^components;

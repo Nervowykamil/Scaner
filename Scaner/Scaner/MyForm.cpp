@@ -8,8 +8,11 @@ void Scaner::MyForm::addLogLine(String ^ line)
     this->richTextBox1->AppendText(line);
 }
 
-void Scaner::MyForm::ClearMap()
+void Scaner::MyForm::RedrawMap()
 {
+    g2->DrawImage(bm, 0, 0);
+
+    // also cleanup buffer
     g1->Clear(System::Drawing::Color::Azure);
 }
 

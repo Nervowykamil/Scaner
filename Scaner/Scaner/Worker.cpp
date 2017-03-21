@@ -57,8 +57,7 @@ void Worker::doWork()
 
 void Worker::Tick()
 {
-    // initial cleanup of map and update player data(position/guid etc)
-    formPtr->ClearMap();
+    // update player data(position/guid etc)    
     rdr->UpdatePlayerInfo();
 
     // gps stuff
@@ -91,6 +90,8 @@ void Worker::Tick()
             break;
         }
     }
+    // now when we have image drawn in offscreenbuffer redraw it to onscreen buffer
+    formPtr->RedrawMap();
 }
 
 Worker::Worker()
